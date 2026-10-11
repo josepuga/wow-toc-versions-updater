@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# Update the versions of a toc file WoW addon
+# Update the versions of a toc file WoW addon and
+# if exists, add change log to CHANGELOG.md
 # By José Puga 2026. Under MIT license.
 
 if [ "$#" -ne 2 ]; then
@@ -20,7 +21,7 @@ csv_file="$2"
 [ ! -f "$csv_file" ] && echo "CSV File $csv_file does not exists" && exit 1
 
 if (( $(date +%s) - $(stat -c %Y "$csv_file") > 7 * 86400 )); then
-    echo "WARNING: CSV older than a week" >&2
+    >&2 echo "WARNING: CSV older than a week" 
 fi
 
 # Extracting tags...
@@ -108,7 +109,6 @@ line_version="## Version: $new_ver"
 echo -e "\nAddon Updated: $old_ver -> $new_ver"
 
 
-
 # Interface versions
 line_tag="## TAG_ORDER:"
 line_iface="## Interface:"
@@ -124,3 +124,10 @@ sed -i.bak \
     -e "s/^## TAG_ORDER:.*/$line_tag/" \
     -e "s/^## Interface:.*/$line_iface/" \
     "$toc_file"
+
+# If exists CHANGELOG.md, add new version, and a generic text
+changelog_file=$(dirname "$toc_file")/CHANGELOG.md
+[ ! -f "$changelog_file" ] && >&2 echo "CHANGELOG.md not found, ignored." && exit 0
+
+sed -i "1i\\### $new_ver\n\t- Updated Interface version.\n" "$changelog_file"
+

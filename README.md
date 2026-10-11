@@ -36,9 +36,9 @@ If a version cannot be retrieved, `ERROR` is used as its value.
 
 This script only needs to be run when you want to refresh the WoW client version information.
 
-## 2. `update-toc.sh`
+## 2. `update-addon.sh`
 
-Updates an addon's `.toc` file using the versions previously retrieved by `get-versions.sh`.
+Updates an addon's `.toc` file using the versions previously retrieved by `get-versions.sh`. And add an entry to CHANGELOG.md (if exists).
 
 **Usage:**
 
@@ -55,6 +55,7 @@ The script compares the versions in the CSV file against those declared in the a
 - Preserves existing Interface versions when updated information is unavailable.
 - Updates `## TAG_ORDER:` to maintain the correct correspondence between clients and Interface versions.
 - Creates a backup of the original `.toc` file with a `.bak` extension.
+- If a `CHANGELOG.md` file exists, adds a generic entry "Updated Interface version".
 
 **If no changes are detected**, the `.toc` file remains untouched.
 
@@ -62,7 +63,7 @@ The script also displays a warning if the CSV file is more than seven days old.
 
 ## Required TOC Configuration: `TAG_ORDER`
 
-The `update-toc.sh` script requires an additional metadata field in the addon's `.toc` file:
+The `update-addon.sh` script requires an additional metadata field in the addon's `.toc` file:
 
 ```toc
 ## TAG_ORDER: wow wow_classic wow_classic_era wow_anniversary wow_classic_beta
@@ -73,13 +74,13 @@ The `update-toc.sh` script requires an additional metadata field in the addon's 
 
 The relationship is positional:
 
-| TAG_ORDER | Interface | WoW Client |
-|---|---|---|
-| `wow` | `120100` | Retail |
-| `wow_classic` | `50504` | Progressive Classic |
-| `wow_classic_era` | `11509` | Classic Era |
-| `wow_anniversary` | `20506` | Anniversary |
-| `wow_classic_beta` | `16001` | Classic Beta |
+| TAG_ORDER          | Interface | WoW Client          |
+| ------------------ | --------- | ------------------- |
+| `wow`              | `120100`  | Retail              |
+| `wow_classic`      | `50504`   | Progressive Classic |
+| `wow_classic_era`  | `11509`   | Classic Era         |
+| `wow_anniversary`  | `20506`   | Anniversary         |
+| `wow_classic_beta` | `16001`   | Classic Beta        |
 
 **Important:**
 
